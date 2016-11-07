@@ -1,12 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloExplorer-Mars.CSharp", "HoloExplorer-Mars.CSharp.csproj", "{208830A5-917B-47F7-DEE9-8AB9329F43C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloExplorer-Mars.CSharp.Editor", "HoloExplorer-Mars.CSharp.Editor.csproj", "{711751B3-3F2E-C018-F29F-207AE8D82468}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{208830A5-917B-47F7-DEE9-8AB9329F43C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{208830A5-917B-47F7-DEE9-8AB9329F43C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{208830A5-917B-47F7-DEE9-8AB9329F43C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{208830A5-917B-47F7-DEE9-8AB9329F43C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711751B3-3F2E-C018-F29F-207AE8D82468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711751B3-3F2E-C018-F29F-207AE8D82468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711751B3-3F2E-C018-F29F-207AE8D82468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711751B3-3F2E-C018-F29F-207AE8D82468}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
