@@ -1,7 +1,7 @@
 # HoloExplorer-Mars
 Mars exploration simulation for Windows Holographic. Work in progress, stay tuned.
 
-**Unity version: 5.5.0f2 Preview**
+**Unity version: 5.5.0f3 Release**
 
 ## Screenshot
 ![Screenshot](Screenshots/UnityDesignerView01.JPG)
