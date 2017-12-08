@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloExplorer-Mars", "HoloExplorer-Mars.csproj", "{21C629BC-D991-B6E4-32E8-06027F4DF97D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoloExplorer-Mars.Editor", "HoloExplorer-Mars.Editor.csproj", "{031B100E-55ED-830B-4AB1-4ABE7180AA14}"

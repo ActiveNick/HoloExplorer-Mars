@@ -1,12 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using UnityEngine;
-using System.Collections;
-using HoloToolkit.Unity;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System;
+using UnityEngine;
+using HoloToolkit.Unity.SpatialMapping;
 
 namespace HoloToolkit.Unity
 {
@@ -47,13 +44,10 @@ namespace HoloToolkit.Unity
         {
             get
             {
-#if UNITY_METRO && !UNITY_EDITOR
                 return true;
-#else
-                return false;
-#endif
             }
         }
+
         /// <summary>
         /// Reference to the SpatialUnderstandingDLL class (wraps the understanding dll functions).
         /// </summary>
@@ -104,7 +98,14 @@ namespace HoloToolkit.Unity
             }
         }
 
+        public delegate void OnScanDoneDelegate();
+
         // Events
+        /// <summary>
+        /// Event indicating that the scan is done
+        /// </summary>
+        public event OnScanDoneDelegate OnScanDone;
+
         /// <summary>
         /// Event indicating that the scan state has changed
         /// </summary>
@@ -116,8 +117,10 @@ namespace HoloToolkit.Unity
         private float timeSinceLastUpdate = 0.0f;
 
         // Functions
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             // Cache references to required component
             UnderstandingDLL = new SpatialUnderstandingDll();
             UnderstandingSourceMesh = GetComponent<SpatialUnderstandingSourceMesh>();
@@ -152,13 +155,15 @@ namespace HoloToolkit.Unity
             }
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             // Term the DLL
             if (AllowSpatialUnderstanding)
             {
                 SpatialUnderstandingDll.Imports.SpatialUnderstanding_Term();
             }
+
+            base.OnDestroy();
         }
 
         /// <summary>
@@ -210,9 +215,10 @@ namespace HoloToolkit.Unity
                 (AllowSpatialUnderstanding))
             {
                 // Camera
-                Vector3 camPos = Camera.main.transform.position;
-                Vector3 camFwd = Camera.main.transform.forward;
-                Vector3 camUp = Camera.main.transform.up;
+                Transform cameraTransform = CameraCache.Main.transform;
+                Vector3 camPos = cameraTransform.position;
+                Vector3 camFwd = cameraTransform.forward;
+                Vector3 camUp = cameraTransform.up;
 
                 // If not yet initialized, do that now
                 if (ScanState == ScanStates.ReadyToScan)
@@ -230,18 +236,27 @@ namespace HoloToolkit.Unity
                 IntPtr meshList;
                 if (UnderstandingSourceMesh.GetInputMeshList(out meshCount, out meshList))
                 {
+                    var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+
                     scanDone = SpatialUnderstandingDll.Imports.GeneratePlayspace_UpdateScan(
                         meshCount, meshList,
                         camPos.x, camPos.y, camPos.z,
                         camFwd.x, camFwd.y, camFwd.z,
                         camUp.x, camUp.y, camUp.z,
                         deltaTime) == 1;
+
+                    stopWatch.Stop();
+
+                    if (stopWatch.Elapsed.TotalMilliseconds > (1000.0 / 30.0))
+                    {
+                        Debug.LogWarningFormat("SpatialUnderstandingDll.Imports.GeneratePlayspace_UpdateScan took {0,9:N2} ms", stopWatch.Elapsed.TotalMilliseconds);
+                    }
                 }
             }
 
             // If it's done, finish up
             if ((ScanState == ScanStates.Finishing) &&
-                (scanDone) && 
+                (scanDone) &&
                 (!UnderstandingCustomMesh.IsImportActive) &&
                 (UnderstandingCustomMesh != null))
             {
@@ -250,6 +265,7 @@ namespace HoloToolkit.Unity
 
                 // Mark it
                 ScanState = ScanStates.Done;
+                if (OnScanDone != null) OnScanDone.Invoke();
             }
         }
     }
